@@ -7,6 +7,7 @@ from nodes.cv.video_capture import VideoCaptureSource
 from nodes.cv.image_display import ImageDisplay
 from nodes.value_display import *
 from nodes.value_sources import *
+from nodes.python_inline import PythonEval, PythonExec
 
 id_main_window = "##main_window"
 id_node_editor = "##node_editor"
@@ -123,9 +124,11 @@ def setup_dearpygui(nodes: List[Node]) -> None:
             dpg.add_separator()
             dpg.add_button(label="Video Capture",
                            callback=lambda: on_button_spawn_node(VideoCaptureSource(), nodes, n))
-            dpg.add_separator()
             dpg.add_button(label="Display", callback=lambda: on_button_spawn_node(ValueDisplay(), nodes, n))
             dpg.add_button(label="Image Display", callback=lambda: on_button_spawn_node(ImageDisplay(), nodes, n))
+            dpg.add_separator()
+            dpg.add_button(label="Eval", callback=lambda: on_button_spawn_node(PythonEval(), nodes, n))
+            dpg.add_button(label="Exec", callback=lambda: on_button_spawn_node(PythonExec(), nodes, n))
 
     dpg.setup_dearpygui()
 
@@ -160,7 +163,8 @@ def main():
         for node in nodes:
             try:
                 node.update()
-            except Exception:
+            except Exception as e:
+                print(e)
                 # TODO: Should mark the node as broken - Flashing red or similar visually
                 pass
 

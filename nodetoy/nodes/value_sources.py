@@ -15,7 +15,7 @@ class ValueSourceFloat(Node):
     def setup_dearpygui(self, node_editor, pos, delete_callback):
         with dpg.node(label=self._name, parent=node_editor, pos=pos) as n:
             with dpg.node_attribute(label="Value", attribute_type=dpg.mvNode_Attr_Output) as self._id_output:
-                self._id_input = dpg.add_input_float(width=self._width, min_value=-sys.float_info.max, max_value=sys.float_info.max)
+                self._id_input = dpg.add_input_float(width=self._width, min_value=-1000000000.0, max_value=1000000000.0)
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Static):
                 dpg.add_button(label="X", callback=lambda: delete_callback(self, n))
 
@@ -47,7 +47,7 @@ class ValueSourceInt(Node):
     def setup_dearpygui(self, node_editor, pos, delete_callback):
         with dpg.node(label=self._name, parent=node_editor, pos=pos) as n:
             with dpg.node_attribute(label="Value", attribute_type=dpg.mvNode_Attr_Output) as self._id_output:
-                self._id_input = dpg.add_input_int(width=self._width, min_value=-(sys.maxsize - 1), max_value=sys.maxsize)
+                self._id_input = dpg.add_input_int(width=self._width, min_value=-1000000000, max_value=1000000000)
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Static):
                 dpg.add_button(label="X", callback=lambda: delete_callback(self, n))
 
