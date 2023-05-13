@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from abc import ABC, abstractmethod
 from typing import Optional, List, Any
 from dataclasses import dataclass

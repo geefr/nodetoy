@@ -6,6 +6,5 @@ authors = [
     { name = "Gareth Francis", email = "gfrancis.dev@gmail.com" }
 ]
 dependencies = [
-    "dearpygui==1.9.1",
-    "pydantic==1.10.7"
+    "dearpygui==1.9.1"
 ]
