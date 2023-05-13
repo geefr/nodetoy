@@ -1,0 +1,11 @@
+[project]
+name = "nodegraphtoy"
+description = "A playground using DearPyGUI node graphs for processing"
+version = "0.1.0"
+authors = [
+    { name = "Gareth Francis", email = "gfrancis.dev@gmail.com" }
+]
+dependencies = [
+    "dearpygui==1.9.1",
+    "pydantic==1.10.7"
+]
