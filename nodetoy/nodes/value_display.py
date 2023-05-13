@@ -1,35 +1,34 @@
-from .node import Node
+from nodetoy.nodes.node import Node
 import dearpygui.dearpygui as dpg
 from typing import Any, List
 
-class ValueSourceFloat(Node):
-    def __init__(self, name="Float Source"):
+class ValueDisplay(Node):
+    def __init__(self, name="Value Display"):
         self._name = name
-        self._width = 150
 
-        self._id_input = None
-        self._id_output = None
+        self._id_in = None
+        self._id_label = None
         self._value = None
 
     def setup_dearpygui(self, node_editor, pos, delete_callback):
         with dpg.node(label=self._name, parent=node_editor, pos=pos) as n:
-            with dpg.node_attribute(label="Value", attribute_type=dpg.mvNode_Attr_Output) as self._id_output:
-                self._id_input = dpg.add_input_float(width=self._width)
+            with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Input) as self._id_in:
+                self._id_label = dpg.add_text()
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Static):
                 dpg.add_button(label="X", callback=lambda: delete_callback(self, n))
 
     def update(self):
-        self._value = dpg.get_value(self._id_input)
+        dpg.set_value(self._id_label, self._value)
 
     def input_attribute_ids(self) -> List[int]:
-        return []
+        return [self._id_in]
 
     def output_attribute_ids(self) -> List[int]:
-        return [self._id_output]
+        return []
 
     def set_input_attribute_value(self, attrib_id: int, value: Any) -> None:
-        pass
+        if attrib_id == self._id_in:
+            self._value = value
 
     def get_output_attribute_value(self, attrib_id: int) -> Any:
-        if attrib_id == self._id_output:
-            return self._value
+        return None

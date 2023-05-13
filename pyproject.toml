@@ -1,10 +1,12 @@
 [project]
-name = "nodegraphtoy"
+name = "nodetoy"
 description = "A playground using DearPyGUI node graphs for processing"
 version = "0.1.0"
 authors = [
     { name = "Gareth Francis", email = "gfrancis.dev@gmail.com" }
 ]
 dependencies = [
-    "dearpygui==1.9.1"
+    "dearpygui==1.9.1",
+    "opencv-python",
+    "numpy"
 ]

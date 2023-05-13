@@ -1,9 +1,12 @@
+from typing import List, Optional
+
 import dearpygui.dearpygui as dpg
 
-from nodes.value_sources import *
 from nodes.arithmetic import Arithmetic
+from nodes.cv.video_capture import VideoCaptureSource
+from nodes.cv.image_display import ImageDisplay
 from nodes.value_display import *
-from typing import List, Optional
+from nodes.value_sources import *
 
 id_main_window = "##main_window"
 id_node_editor = "##node_editor"
@@ -11,17 +14,10 @@ id_right_click = "##right_click_menu"
 
 dpg.create_context()
 
-nodes = [
-    # ValueSourceFloat("Input 1"),
-    # ValueSourceFloat("Input 2"),
-    # Arithmetic("Add", Arithmetic.ADD),
-    # Arithmetic("Sub", Arithmetic.SUBTRACT),
-    # Arithmetic("Div", Arithmetic.DIVIDE),
-    # Arithmetic("Mul", Arithmetic.MULTIPLY),
-    # ValueDisplay(),
-]
+nodes = []
 links = dict()
 
+spawn_pos = (0, 0)
 
 def _find_node_with_output_attribute_id(nodes: List[Node], attrib_id: int) -> Optional[Node]:
     for node in nodes:
@@ -63,10 +59,11 @@ def delink_callback(sender, app_data):
     del links[app_data]
 
 
-def on_button_spawn_node(created_node, nodes, node_editor):
-    pos = dpg.get_mouse_pos(local=False)
+def on_button_spawn_node(created_node, node_list, node_editor):
+    # pos = dpg.get_mouse_pos(local=False)
+    pos = spawn_pos
     created_node.setup_dearpygui(node_editor, pos, on_delete_node)
-    nodes.append(created_node)
+    node_list.append(created_node)
     dpg.configure_item(id_right_click, show=False)
 
 
@@ -97,8 +94,9 @@ def setup_dearpygui(nodes: List[Node]) -> None:
                 node.setup_dearpygui(n, (0, 0), on_delete_node)
 
         def right_click_cb(sender, app_data):
-            mouse_pos = dpg.get_mouse_pos(local=False)
-            dpg.configure_item(id_right_click, show=True, pos=mouse_pos)
+            global spawn_pos
+            spawn_pos = dpg.get_mouse_pos(local=False)
+            dpg.configure_item(id_right_click, show=True, pos=spawn_pos)
 
         def left_click_cb(sender, app_data):
             dpg.configure_item(id_right_click, show=False)
@@ -122,7 +120,11 @@ def setup_dearpygui(nodes: List[Node]) -> None:
             dpg.add_button(label="Multiply",
                            callback=lambda: on_button_spawn_node(Arithmetic("Mul", Arithmetic.MULTIPLY), nodes, n))
             dpg.add_separator()
+            dpg.add_button(label="Video Capture",
+                           callback=lambda: on_button_spawn_node(VideoCaptureSource(), nodes, n))
+            dpg.add_separator()
             dpg.add_button(label="Display", callback=lambda: on_button_spawn_node(ValueDisplay(), nodes, n))
+            dpg.add_button(label="Image Display", callback=lambda: on_button_spawn_node(ImageDisplay(), nodes, n))
 
     dpg.setup_dearpygui()
 
@@ -143,15 +145,23 @@ def main():
 
         # Propagate data across links
         for link in links.values():
-            node_a = _find_node_with_output_attribute_id(nodes, link[0])
-            node_b = _find_node_with_input_attribute_id(nodes, link[1])
+            try:
+                node_a = _find_node_with_output_attribute_id(nodes, link[0])
+                node_b = _find_node_with_input_attribute_id(nodes, link[1])
 
-            if node_a is not None and node_b is not None:
-                v = node_a.get_output_attribute_value(link[0])
-                node_b.set_input_attribute_value(link[1], v)
+                if node_a is not None and node_b is not None:
+                    v = node_a.get_output_attribute_value(link[0])
+                    node_b.set_input_attribute_value(link[1], v)
+            except Exception:
+                # TODO: Should list errors, or otherwise break the links - Can the link colour be changed?
+                pass
 
         for node in nodes:
-            node.update()
+            try:
+                node.update()
+            except Exception:
+                # TODO: Should mark the node as broken - Flashing red or similar visually
+                pass
 
         dpg.render_dearpygui_frame()
 

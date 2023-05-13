@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Any
-from dataclasses import dataclass
+from typing import List, Any
 
 class Node(ABC):
     @abstractmethod
