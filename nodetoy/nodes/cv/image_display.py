@@ -2,7 +2,6 @@ from nodetoy.nodes.node import Node
 import dearpygui.dearpygui as dpg
 from typing import Any, List
 import numpy as np
-from copy import deepcopy
 import cv2
 
 class ImageDisplay(Node):
@@ -44,7 +43,7 @@ class ImageDisplay(Node):
             elif num_channels == 3:
                 img = cv2.cvtColor(img, cv2.COLOR_RGB2BGRA)
 
-            dpg.set_value(self._id_texture, np.divide(img.astype(np.float32), 255.0))
+            dpg.set_value(self._id_texture, img.astype(np.float32))
 
     def get_output_attribute_value(self, attrib_id: int) -> Any:
         return None

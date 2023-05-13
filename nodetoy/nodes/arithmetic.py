@@ -27,14 +27,11 @@ class Arithmetic(Node):
     def setup_dearpygui(self, node_editor, pos, delete_callback):
         with dpg.node(label=self._name, parent=node_editor, pos=pos) as n:
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Input) as self._id_a:
-                # self._id_a_label = dpg.add_text()
-                dpg.add_spacer(height=8)
+                dpg.add_spacer(width=32, height=8)
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Output) as self._id_c:
-                # self._id_c_label = dpg.add_text()
-                dpg.add_spacer(height=8)
+                dpg.add_spacer(width=32, height=8)
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Input) as self._id_b:
-                # self._id_b_label = dpg.add_text()
-                dpg.add_spacer(height=8)
+                dpg.add_spacer(width=32, height=8)
             with dpg.node_attribute(attribute_type=dpg.mvNode_Attr_Static):
                 dpg.add_button(label="X", callback=lambda: delete_callback(self, n))
 
@@ -48,10 +45,6 @@ class Arithmetic(Node):
                 self._c = self._a / self._b
             elif self._op == Arithmetic.MULTIPLY:
                 self._c = self._a * self._b
-
-        # dpg.set_value(self._id_a_label, self._a)
-        # dpg.set_value(self._id_b_label, self._b)
-        # dpg.set_value(self._id_c_label, self._c)
 
     def input_attribute_ids(self) -> List[int]:
         return [self._id_a, self._id_b]

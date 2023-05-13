@@ -109,7 +109,8 @@ def setup_dearpygui(nodes: List[Node]) -> None:
         with dpg.window(label="Right click window", modal=True, show=False, id=id_right_click, no_title_bar=True):
             dpg.add_button(label="Close", callback=lambda: dpg.configure_item(id_right_click, show=False))
             dpg.add_separator()
-            dpg.add_button(label="Float", callback=lambda: on_button_spawn_node(ValueSourceFloat("Float"), nodes, n))
+            dpg.add_button(label="Int", callback=lambda: on_button_spawn_node(ValueSourceInt(), nodes, n))
+            dpg.add_button(label="Float", callback=lambda: on_button_spawn_node(ValueSourceFloat(), nodes, n))
             dpg.add_separator()
             dpg.add_button(label="Add",
                            callback=lambda: on_button_spawn_node(Arithmetic("Add", Arithmetic.ADD), nodes, n))
